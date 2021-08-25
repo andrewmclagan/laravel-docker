@@ -1,0 +1,44 @@
+#!/bin/bash
+
+set -e
+
+PHP_VER=7.4
+
+cd base && \
+
+docker buildx build \
+	--push \
+	--tag andrewmclagan/php:${PHP_VER} \
+	--build-arg PHP_VERSION=${PHP_VER} \
+	--platform linux/arm64/v8,linux/amd64 . && \
+
+cd ../http && \
+
+docker buildx build \
+	--push \
+	--tag andrewmclagan/php:${PHP_VER}-http \
+	--build-arg PHP_VERSION=${PHP_VER} \
+	--platform linux/arm64/v8,linux/amd64 .	&& \
+
+cd ../queue && \
+
+docker buildx build \
+	--push \
+	--tag andrewmclagan/php:${PHP_VER}-queue \
+	--build-arg PHP_VERSION=${PHP_VER} \
+	--platform linux/arm64/v8,linux/amd64 .	&& \
+
+cd ../schedule && \
+
+docker buildx build \
+	--push \
+	--tag andrewmclagan/php:${PHP_VER}-schedule \
+	--build-arg PHP_VERSION=${PHP_VER} \
+	--platform linux/arm64/v8,linux/amd64 .	&& \
+
+cd .. && \
+
+docker pull andrewmclagan/php:${PHP_VER} && \
+docker pull andrewmclagan/php:${PHP_VER}-http && \
+docker pull andrewmclagan/php:${PHP_VER}-queue && \
+docker pull andrewmclagan/php:${PHP_VER}-schedule

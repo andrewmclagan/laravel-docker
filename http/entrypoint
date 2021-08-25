@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -e
+
+if [ "$PHP_ENVIRONMENT" = "production" ]; then
+    source /var/optimise
+    echo 'opcache.validate_timestamps=0' >> /usr/local/etc/php/conf.d/php-fpm.ini
+fi
+
+exec "$@"
